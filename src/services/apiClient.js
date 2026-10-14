@@ -1,7 +1,7 @@
 import axios from "axios"
 import { normalizeError } from "./apiError";
-import { queryClient } from "./queryClient";
-import { queryKeys } from "../../constants/queryKeys";
+import { queryClient } from "./queryClient.js";
+import { queryKeys } from "../constants/queryKeys.js";
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
