@@ -7,7 +7,7 @@ import { cn } from "../../lib/cn";
 import Button from "../../components/ui/Button";
 
 const AUTOPLAY_MS = 6000;
-const SWIPE_THRESHOLD = 50; 
+const SWIPE_THRESHOLD = 50;
 
 function optimize(url, width) {
   return url.includes("/upload/") ? url.replace("/upload/", `/upload/f_auto,q_auto,w_${width}/`) : url;
@@ -41,13 +41,17 @@ export default function HeroSection({ slides = HERO_SLIDES, autoPlay = true, int
   const total = slides.length;
   const [current, setCurrent] = useState(0);
   const [isPlaying, setIsPlaying] = useState(() => autoPlay && !prefersReducedMotion());
-  const [isHovering, setIsHovering] = useState(false); 
+  const [isHovering, setIsHovering] = useState(false);
   const touchStartX = useRef(null);
 
-  const [visited, setVisited] = useState(() => new Set([0, 1 % total, total - 1]));
+  const [visited, setVisited] = useState(() =>
+    total ? new Set([0, 1 % total, total - 1]) : new Set()
+  );
+  const activeIndex = total ? current % total : 0;
 
   const goTo = useCallback(
     (index) => {
+      if (!total) return;
       const target = (index + total) % total;
       setCurrent(target);
       setVisited((previous) => {
@@ -61,13 +65,13 @@ export default function HeroSection({ slides = HERO_SLIDES, autoPlay = true, int
 
   useEffect(() => {
     if (!isPlaying || isHovering || total < 2) return;
-    const timer = setTimeout(() => goTo(current + 1), interval);
+    const timer = setTimeout(() => goTo(activeIndex + 1), interval);
     return () => clearTimeout(timer);
-  }, [current, isPlaying, isHovering, total, interval, goTo]);
+  }, [activeIndex, isPlaying, isHovering, total, interval, goTo]);
 
   function handleKeyDown(event) {
-    if (event.key === "ArrowRight") goTo(current + 1);
-    if (event.key === "ArrowLeft") goTo(current - 1);
+    if (event.key === "ArrowRight") goTo(activeIndex + 1);
+    if (event.key === "ArrowLeft") goTo(activeIndex - 1);
   }
 
   function handleTouchStart(event) {
@@ -78,7 +82,7 @@ export default function HeroSection({ slides = HERO_SLIDES, autoPlay = true, int
     if (touchStartX.current === null) return;
     const distance = event.changedTouches[0].clientX - touchStartX.current;
     touchStartX.current = null;
-    if (Math.abs(distance) > SWIPE_THRESHOLD) goTo(current + (distance < 0 ? 1 : -1));
+    if (Math.abs(distance) > SWIPE_THRESHOLD) goTo(activeIndex + (distance < 0 ? 1 : -1));
   }
 
   function handleBlur(event) {
@@ -86,6 +90,8 @@ export default function HeroSection({ slides = HERO_SLIDES, autoPlay = true, int
   }
 
   const autoMoving = isPlaying && !isHovering;
+
+  if (!total) return null;
 
   return (
     <section
@@ -121,7 +127,7 @@ export default function HeroSection({ slides = HERO_SLIDES, autoPlay = true, int
                   draggable={false}
                   className={cn(
                     "absolute inset-0 size-full object-cover transition-[opacity,scale] duration-1000 ease-out motion-reduce:transition-none",
-                    index === current ? "scale-100 opacity-100" : "scale-105 opacity-0"
+                    index === activeIndex ? "scale-100 opacity-100" : "scale-105 opacity-0"
                   )}
                 />
               )
@@ -133,9 +139,9 @@ export default function HeroSection({ slides = HERO_SLIDES, autoPlay = true, int
           className="absolute inset-0 -z-10 bg-linear-to-t from-primary-dark/90 via-primary-dark/45 to-primary-dark/5 md:bg-linear-to-r md:from-primary-dark/75 md:via-primary-dark/30 md:to-transparent"
         />
 
-        <div className="grid min-h-[560px] md:min-h-[620px]">
+        <div className="grid h-[calc(100dvh-4rem)] min-h-0 grid-rows-[minmax(0,1fr)]">
           {slides.map((slide, index) => {
-            const active = index === current;
+            const active = index === activeIndex;
             return (
               <div
                 key={slide.image}
@@ -146,7 +152,7 @@ export default function HeroSection({ slides = HERO_SLIDES, autoPlay = true, int
                 inert={!active}
                 className="relative col-start-1 row-start-1 flex items-end md:items-center"
               >
-                <div className="flex max-w-2xl flex-col items-start gap-5 p-6 pb-24 md:p-14">
+                <div className="flex max-w-2xl flex-col items-start gap-3 p-5 pb-24 sm:gap-5 sm:p-6 sm:pb-24 md:p-14">
                   <span
                     className={cn(
                       "inline-flex items-center gap-2 rounded-full bg-[#90ee9047] px-4 py-1.5 text-sm text-white backdrop-blur",
@@ -156,18 +162,18 @@ export default function HeroSection({ slides = HERO_SLIDES, autoPlay = true, int
                     <Leaf aria-hidden="true" className="size-4" />
                     {slide.badge}
                   </span>
-                  <h2 className={cn("text-4xl leading-tight text-white md:text-6xl", reveal(active, "delay-200"))}>
+                  <h2 className={cn("text-3xl leading-tight text-white sm:text-4xl md:text-6xl", reveal(active, "delay-200"))}>
                     {slide.title}
                   </h2>
-                  <p className={cn("max-w-lg text-base text-white/85 md:text-lg", reveal(active, "delay-300"))}>
+                  <p className={cn("max-w-lg text-sm text-white/85 sm:text-base md:text-lg", reveal(active, "delay-300"))}>
                     {slide.description}
                   </p>
-                  <div className={cn("flex flex-wrap gap-3 pt-2", reveal(active, "delay-500"))}>
-                    <Button as={Link} to={slide.to} size="lg">
+                  <div className={cn("flex flex-wrap gap-3 pt-2 mb-6", reveal(active, "delay-500"))}>
+                    <Button as={Link} to={slide.to} size="md" className="md:px-8 md:py-4">
                       {slide.cta}
                       <ArrowRight aria-hidden="true" className="size-4" />
                     </Button>
-                    <Button as="a" href="#commitment" className="bg-white/10 backdrop-blur-md transition-all duration-300 hover:bg-white/20  " size="lg">
+                    <Button as="a" href="#commitment" className="bg-white/10  backdrop-blur-md transition-all duration-300 hover:bg-white/20 md:px-8 md:py-4" size="md">
                       Our Philosophy
                     </Button>
                   </div>
@@ -203,14 +209,14 @@ export default function HeroSection({ slides = HERO_SLIDES, autoPlay = true, int
                   key={slide.image}
                   type="button"
                   aria-label={`Go to slide ${index + 1}`}
-                  aria-current={index === current ? "true" : undefined}
+                  aria-current={index === activeIndex ? "true" : undefined}
                   onClick={() => goTo(index)}
                   className="group rounded-full p-1.5 focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-white"
                 >
                   <span
                     className={cn(
                       "block h-1.5 rounded-full transition-[width,background-color] duration-500 motion-reduce:transition-none",
-                      index === current ? "w-6 bg-white" : "w-1.5 bg-white/50 group-hover:bg-white/80"
+                      index === activeIndex ? "w-6 bg-white" : "w-1.5 bg-white/50 group-hover:bg-white/80"
                     )}
                   />
                 </button>
@@ -223,17 +229,17 @@ export default function HeroSection({ slides = HERO_SLIDES, autoPlay = true, int
             >
               {isPlaying ? <Pause /> : <Play />}
             </ControlButton>
-            <ControlButton label="Previous slide" onClick={() => goTo(current - 1)}>
+            <ControlButton label="Previous slide" onClick={() => goTo(activeIndex - 1)}>
               <ChevronLeft />
             </ControlButton>
-            <ControlButton label="Next slide" onClick={() => goTo(current + 1)}>
+            <ControlButton label="Next slide" onClick={() => goTo(activeIndex + 1)}>
               <ChevronRight />
             </ControlButton>
           </div>
         )}
 
         <p aria-live={autoMoving ? "off" : "polite"} className="sr-only">
-          Slide {current + 1} of {total}: {slides[current].title}
+          Slide {activeIndex + 1} of {total}: {slides[activeIndex].title}
         </p>
       </div>
     </section>
