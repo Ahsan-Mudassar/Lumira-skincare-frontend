@@ -53,7 +53,7 @@ export default function Header() {
               {cartCount > 0 && (
                 <span
                   aria-hidden="true"
-                  className="absolute -top-0.5 -right-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-xs font-medium text-white"
+                  className="absolute -top-0.5 -right-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-green-100 px-1 text-xs font-medium text-green-500"
                 >
                   {cartCount > 99 ? "99+" : cartCount}
                 </span>
