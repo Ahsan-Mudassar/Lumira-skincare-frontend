@@ -1,6 +1,5 @@
 import { cn } from "../../lib/cn";
 
-// white = storefront cards (soft shadow) | muted/surface = admin panels (Figma dashboard)
 const tones = {
   white: "bg-white shadow-soft",
   muted: "bg-cream-alt",
@@ -9,7 +8,7 @@ const tones = {
 
 const paddings = {
   none: "",
-  sm: "p-4",
+  sm: "p-2",
   md: "p-6",
   lg: "p-8",
 };
