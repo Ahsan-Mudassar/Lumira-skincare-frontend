@@ -9,7 +9,7 @@ import Skeleton from "../../components/ui/Skeleton";
 import { getCategoryName, getProductImage, isOutOfStock } from "./productUtils";
 
 export default function ProductCard({ product }) {
-  const image = getProductImage(product);
+  const images = getProductImage(product);
   const category = getCategoryName(product);
   const soldOut = isOutOfStock(product);
   const onSale = product.discountPrice != null && product.discountPrice < product.price;
@@ -19,9 +19,9 @@ export default function ProductCard({ product }) {
     <Card padding="sm" className="flex h-full flex-col gap-3">
       <Link to={href} className="group flex flex-1 flex-col gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
         <div className="relative aspect-square overflow-hidden rounded-lg bg-surface">
-          {image && (
+          {images && (
             <img
-              src={image}
+              src={images}
               alt={product.name}
               loading="lazy"
               className="size-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
