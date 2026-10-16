@@ -52,14 +52,13 @@ export default function ReviewForm({ productId, productSlug, onDone }) {
       comment: values.comment,
     });
   }
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
       <p className="text-sm text-muted">
         You can review a product after your order has been delivered. Enter the order number and email you used at
         checkout.
       </p>
-      {mutation.isError && <Alert variant="error">{mutation.error.message}</Alert>}
+      {mutation.isError && <Alert variant="error">{mutation.error.status.message}</Alert>}
       <div className="grid gap-4 sm:grid-cols-2">
         <Input tone="surface" label="Order number" placeholder="LUM-0001" error={errors.orderNumber?.message} {...register("orderNumber")} />
         <Input tone="surface" label="Email" type="email" error={errors.email?.message} {...register("email")} />

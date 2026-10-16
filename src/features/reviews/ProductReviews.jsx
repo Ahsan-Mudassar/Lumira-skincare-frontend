@@ -46,8 +46,7 @@ export default function ProductReviews({ product }) {
   const [formOpen, setFormOpen] = useState(false);
   const { data, isPending, isError, error, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useProductReviews(product.slug, sort);
-
-  const summary = data?.pages[0]?.summary;
+  const summary = data?.pages[0]?.data.summary;
   const reviews = data?.pages.flatMap((page) => page.data) ?? [];
 
   return (
@@ -86,7 +85,7 @@ export default function ProductReviews({ product }) {
               ))}
             </Select>
             <ul className="flex flex-col divide-y divide-line-soft">
-              {reviews.map((review) => (
+              {reviews?.[0].data.map((review) => (
                 <li key={review._id} className="flex flex-col gap-2 py-5 first:pt-0">
                   <div className="flex flex-wrap items-center gap-3">
                     <RatingStars value={review.rating} variant="stars" />

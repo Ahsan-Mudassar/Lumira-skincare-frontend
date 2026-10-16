@@ -4,7 +4,7 @@ import { cn } from "../../lib/cn";
 
 export default function ProductGallery({ images, name }) {
   const [index, setIndex] = useState(0);
-console.log(images)
+
   if (images.length === 0) {
     return <div aria-hidden="true" className="aspect-square rounded-xl bg-surface" />;
   }
