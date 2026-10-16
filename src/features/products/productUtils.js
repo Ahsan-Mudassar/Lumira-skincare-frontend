@@ -1,5 +1,5 @@
 export function getProductImage(product) {
-  const first = product?.images?.url?.[0];
+  const first = product?.images?.url[0];
   if (!first) return null;
   return typeof first === "string" ? first : (first.url ?? null);
 }
@@ -30,4 +30,9 @@ export function toCartItem(product, quantity = 1) {
     price: getEffectivePrice(product),
     quantity,
   };
+}
+
+export function getProductImages(product) {
+  console.log("2",product)
+  return (product?.images.url ?? []).map((image) => (typeof image === "string" ? image : image?.url)).filter(Boolean);
 }
