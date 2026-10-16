@@ -17,7 +17,7 @@ export default function Alert({ variant = "info", title, icon, className, childr
       <span className={cn("flex size-10 shrink-0 items-center justify-center rounded-full", iconStyle)}>
         <Icon aria-hidden="true" className="size-5" />
       </span>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 justify-center">
         {title && <p className="font-medium text-ink">{title}</p>}
         <div className="text-sm text-body">{children}</div>
       </div>
