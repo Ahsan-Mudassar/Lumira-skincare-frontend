@@ -25,7 +25,7 @@ export function useLogout() {
     mutationFn: logout,
     onSettled: () => {
       queryClient.setQueryData(queryKeys.auth.me, null);
-      queryClient.removeQueries({ queryKey: ["admin"] }); // admin ka cached data saaf
+      queryClient.removeQueries({ queryKey: ["admin"] }); 
     },
   });
 }
