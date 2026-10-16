@@ -1,3 +1,4 @@
+import ContactSection from "../features/home/ContactSection";
 import CategorySection from "../features/home/CategorySection";
 import FeaturedSection from "../features/home/FeaturedSection";
 import HeroSection from "../features/home/HeroSection";
@@ -14,6 +15,7 @@ export default function HomePage() {
       <CategorySection />
       <FeaturedSection />
       <TestimonialsSection />
+      <ContactSection />
     </>
   );
 }
