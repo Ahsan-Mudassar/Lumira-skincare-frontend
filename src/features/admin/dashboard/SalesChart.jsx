@@ -1,7 +1,5 @@
 import { formatPrice } from "../../../lib/formatPrice";
 
-// UNVERIFIED: README sirf "daily series, zero-filled days + totals" kehta hai, field naam nahi.
-// Neeche ka normalizer kai mumkin naam try karta hai. Real response dekh kar yahan tight karenge.
 export function normalizeSales(data) {
   const rows = Array.isArray(data) ? data : (data?.series ?? data?.days ?? data?.daily ?? data?.data ?? []);
   return rows.map((row) => ({
@@ -16,7 +14,6 @@ const shortDate = (label) => {
   return Number.isNaN(date.getTime()) ? label : new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short" }).format(date);
 };
 
-// Chart library ke baghair simple bars (Figma jaisa). metric: "sales" | "orders"
 export default function SalesChart({ rows, metric }) {
   const max = Math.max(...rows.map((row) => row[metric]), 1);
   const total = rows.reduce((sum, row) => sum + row[metric], 0);
@@ -35,7 +32,7 @@ export default function SalesChart({ rows, metric }) {
           <div
             key={row.label}
             title={`${shortDate(row.label)}: ${format(row[metric])}`}
-            className="min-w-[3px] flex-1 rounded-t bg-sage/60 transition-colors hover:bg-primary"
+            className="min-w-0.75 flex-1 rounded-t bg-sage/60 transition-colors hover:bg-primary"
             style={{ height: `${Math.max((row[metric] / max) * 100, row[metric] > 0 ? 3 : 1)}%` }}
           />
         ))}

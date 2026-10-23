@@ -2,7 +2,6 @@ import EmptyState from "../../../components/ui/EmptyState";
 import ErrorState from "../../../components/ui/ErrorState";
 import Skeleton from "../../../components/ui/Skeleton";
 
-// UNVERIFIED: stats lists ke field naam README mein nahi: kai mumkin naam try hote hain.
 export function toRows(data) {
   return Array.isArray(data) ? data : (data?.items ?? data?.products ?? data?.data ?? []);
 }

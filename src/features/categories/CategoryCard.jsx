@@ -9,11 +9,11 @@ export default function CategoryCard({ category }) {
   return (
     <Link
       to={href}
-      className="group relative isolate block aspect-[3/4] overflow-hidden rounded-xl bg-linear-to-br from-sage/40 to-primary-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      className="group relative isolate block aspect-3/4 overflow-hidden rounded-xl bg-linear-to-br from-sage/40 to-primary-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
     >
       <img
-        src={category.image}
-        alt="category images"
+        src={category.image.url}
+        alt={category.slug}               
         loading="lazy"
         className="absolute inset-0 -z-10 size-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
       />
@@ -32,5 +32,5 @@ export default function CategoryCard({ category }) {
 }
 
 export function CategoryCardSkeleton() {
-  return <Skeleton aria-hidden="true" className="aspect-[3/4] w-full rounded-xl" />;
+  return <Skeleton aria-hidden="true" className="aspect-3/4 w-full rounded-xl" />;
 }

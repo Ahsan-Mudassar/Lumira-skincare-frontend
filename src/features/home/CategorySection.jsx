@@ -11,7 +11,7 @@ const VISIBLE_CATEGORIES = 4;
 export default function CategorySection() {
   const { data: categories, isPending, isError, error, refetch } = useCategories();
   if (!isPending && !isError && categories?.length === 0) return null;
-
+console.log(categories)
   return (
     <section aria-labelledby="categories-title" className="container-page py-16">
       <SectionHeading

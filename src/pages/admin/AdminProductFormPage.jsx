@@ -10,6 +10,7 @@ import { buildProductFormData, buildProductUpdate } from "../../features/admin/p
 import { useAdminProducts, useCreateProduct, useUpdateProduct } from "../../features/admin/products/hooks";
 import ProductForm from "../../features/admin/products/ProductForm";
 import { useCategories } from "../../features/categories/useCategories";
+import { useProduct } from "../../features/products/useProducts";
 
 export default function AdminProductFormPage() {
   const { id } = useParams();
@@ -20,7 +21,11 @@ export default function AdminProductFormPage() {
   const create = useCreateProduct();
   const update = useUpdateProduct();
 
-  const product = isEdit ? list.data?.products.find((item) => item._id === id) : undefined;
+  const listItem = isEdit ? list.data?.products.data.find((item) => item._id === id) : undefined;
+
+  const detail = useProduct(listItem?.slug);
+
+  const product = listItem ? { ...(detail.data ?? {}) } : undefined;
   const mutation = isEdit ? update : create;
 
   function handleSubmit(values, files) {
@@ -35,11 +40,12 @@ export default function AdminProductFormPage() {
   }
 
   let body;
-  if (categories.isPending || (isEdit && list.isPending)) body = <Skeleton className="h-96 w-full" />;
+  if (categories.isPending || (isEdit && (list.isPending || (listItem && detail.isPending)))) body = <Skeleton className="h-96 w-full" />;
   else if (categories.isError) body = <ErrorState message={categories.error.message} onRetry={categories.refetch} />;
   else if (isEdit && list.isError) body = <ErrorState message={list.error.message} onRetry={list.refetch} />;
+  else if (isEdit && detail.isError) body = <ErrorState message={detail.error.message} onRetry={detail.refetch} />;
   else if (isEdit && !product) body = <EmptyState title="Product not found" description="It may be inactive or on another page of the list." />;
-  else body = <ProductForm product={product} categories={categories.data} onSubmit={handleSubmit} isPending={mutation.isPending} error={mutation.error} />;
+  else body = <ProductForm key={product?._id ?? "new"} product={product} categories={categories.data} onSubmit={handleSubmit} isPending={mutation.isPending} error={mutation.error} />;
 
   return (
     <div className="flex max-w-3xl flex-col gap-6">

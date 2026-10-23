@@ -20,11 +20,13 @@ const productSchema = z
     name: z.string().trim().min(2, "Name must be at least 2 characters").max(120, "Name is too long"),
     description: z.string().trim().min(10, "Description must be at least 10 characters").max(5000, "Description is too long"),
     price: whole("Enter a whole number").refine((v) => Number(v) > 0, "Must be greater than 0"),
+    costPrice: whole("Enter a whole number").refine((v) => Number(v) > 0, "Must be greater than 0"),
     discountPrice: optionalWhole,
     sku: z.string().trim().min(2, "SKU must be at least 2 characters").max(40, "SKU is too long"),
     category: z.string().min(1, "Select a category"),
     stock: optionalWhole,
     ingredients: z.string().trim(),
+    size: z.string().trim(),
     skinType: z.array(z.string()),
     isFeatured: z.boolean(),
     isActive: z.boolean(),
@@ -34,10 +36,21 @@ const productSchema = z
     path: ["discountPrice"],
   });
 
-const categoryId = (product) => (typeof product?.category === "object" ? (product.category?._id ?? "") : (product?.category ?? ""));
+function resolveCategoryId(product, categories) {
+  const value = product?.category;
+  if (!value) return "";
+  const id = typeof value === "object" ? value._id : value;
+  if (id && categories.some((item) => item._id === id)) return id;
+  if (typeof value === "object") {
+    const match = categories.find((item) => (value.slug && item.slug === value.slug) || (value.name && item.name === value.name));
+    if (match) return match._id;
+  }
+  return "";
+}
 
-// Create: images upload (1-8). Edit: maujooda images dikhti hain (image badalna abhi supported nahi: backend contract unverified),
-// stock alag "Update stock" se badalta hai (backend PATCH /products/:id mein stock reject karta hai).
+const normalizeSkinTypes = (value) => (Array.isArray(value) ? value.map((type) => String(type).toLowerCase()) : []);
+const toList = (value) => (Array.isArray(value) ? value : typeof value === "string" && value ? value.split(",") : []);
+
 export default function ProductForm({ product, categories = [], onSubmit, isPending, error }) {
   const isEdit = Boolean(product);
   const [files, setFiles] = useState([]);
@@ -50,17 +63,19 @@ export default function ProductForm({ product, categories = [], onSubmit, isPend
   } = useForm({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      name: product?.name ?? "",
-      description: product?.description ?? "",
-      price: product?.price != null ? String(product.price) : "",
-      discountPrice: product?.discountPrice != null ? String(product.discountPrice) : "",
-      sku: product?.sku ?? "",
-      category: categoryId(product),
+      name: product?.product.name ?? "",
+      description: product?.product.description ?? "",
+      price: product?.product.price != null ? String(product.product.price) : "",
+      discountPrice: product?.product.discountPrice != null ? String(product.product.discountPrice) : "",
+      costPrice: product?.product.costPrice,
+      size: product?.product.size,
+      sku: product?.product.sku ?? "",
+      category: resolveCategoryId(product.product, categories),
       stock: "",
-      ingredients: (product?.ingredients ?? []).join(", "),
-      skinType: product?.skinType ?? [],
-      isFeatured: Boolean(product?.isFeatured),
-      isActive: product?.isActive !== false,
+      ingredients: toList(product?.product.ingredients).join(", "),
+      skinType: normalizeSkinTypes(product?.product.skinType),
+      isFeatured: Boolean(product?.product.isFeatured),
+      isActive: product?.product.isActive !== false,
     },
   });
 
@@ -70,7 +85,7 @@ export default function ProductForm({ product, categories = [], onSubmit, isPend
   function handleFiles(event) {
     const picked = Array.from(event.target.files ?? []);
     if (picked.length > MAX_PRODUCT_IMAGES) {
-      setFileError(`You can upload up to ${MAX_PRODUCT_IMAGES} images.`);
+      setFileError(`You can upload ${MAX_PRODUCT_IMAGES} image.`);
       return;
     }
     setFileError("");
@@ -90,21 +105,100 @@ export default function ProductForm({ product, categories = [], onSubmit, isPend
       {error && <Alert variant="error" title="Could not save product">{error.message}</Alert>}
 
       <div className="grid gap-4 md:grid-cols-2">
-        <Input tone="surface" label="Name" className="md:col-span-2" error={errors.name?.message} {...register("name")} />
-        <Textarea tone="surface" label="Description" rows={5} className="md:col-span-2" error={errors.description?.message} {...register("description")} />
-        <Input tone="surface" label="Price (Rs)" type="number" inputMode="numeric" min="1" error={errors.price?.message} {...register("price")} />
-        <Input tone="surface" label="Discount price (Rs, optional)" type="number" inputMode="numeric" min="1" hint="Must be lower than the price. Leave empty for no discount." error={errors.discountPrice?.message} {...register("discountPrice")} />
-        <Input tone="surface" label="SKU" error={errors.sku?.message} {...register("sku")} />
-        <Select tone="surface" label="Category" error={errors.category?.message} {...register("category")}>
+        <Input
+          tone="surface"
+          label="Name"
+          className="md:col-span-2"
+          placeholder="Enter product name"
+          error={errors.name?.message}
+          {...register("name")} />
+
+        <Textarea
+          tone="surface"
+          label="Description"
+          rows={5}
+          placeholder="Tell about the product"
+          className="md:col-span-2"
+          error={errors.description?.message}
+          {...register("description")} />
+
+        <Input
+          tone="surface"
+          label="Price (Rs)"
+          placeholder="e.g. 900"
+          type="number"
+          inputMode="numeric"
+          min="1"
+          error={errors.price?.message}
+          {...register("price")} />
+
+        <Input
+          tone="surface"
+          label="Discount price (Rs, optional)"
+          type="number"
+          placeholder="e.g. 900"
+          inputMode="numeric"
+          min="1"
+          hint="Must be lower than the price. Leave empty for no discount."
+          error={errors.discountPrice?.message}
+          {...register("discountPrice")} />
+
+        <Input
+          tone="surface"
+          label="Cost price (Rs)"
+          type="number"
+          placeholder="e.g. 900"
+          inputMode="numeric"
+          min="1"
+          error={errors.costPrice?.message}
+          {...register("costPrice")} />
+
+        <Input
+          tone="surface"
+          label="SKU"
+          error={errors.sku?.message}
+          placeholder="e.g. LUM-MOI-001"
+          {...register("sku")} />
+
+        <Input
+          tone="surface"
+          label="Size"
+          type="text"
+          min="0"
+          placeholder="e.g. 10ml"
+          hint="Wrote as 10ml, 120ml e.t.c."
+          error={errors.size?.message}
+          {...register("size")} />
+
+        <Select
+          tone="surface"
+          label="Category"
+          error={errors.category?.message}
+          {...register("category")}>
           <option value="">Select category</option>
           {categories.map((category) => (
             <option key={category._id} value={category._id}>{category.name}</option>
           ))}
         </Select>
+
         {!isEdit && (
-          <Input tone="surface" label="Opening stock" type="number" inputMode="numeric" min="0" error={errors.stock?.message} {...register("stock")} />
+          <Input
+            tone="surface"
+            label="Opening stock"
+            type="number"
+            inputMode="numeric"
+            min="0"
+            placeholder="e.g. 10"
+            error={errors.stock?.message}
+            {...register("stock")} />
         )}
-        <Input tone="surface" label="Ingredients (comma separated)" className={isEdit ? "md:col-span-2" : ""} error={errors.ingredients?.message} {...register("ingredients")} />
+        <Input
+          tone="surface"
+          label="Ingredients (comma separated)"
+          className={isEdit ? "md:col-span-2" : ""}
+          placeholder="e.g. vitamin A,shea butter"
+          error={errors.ingredients?.message}
+          {...register("ingredients")} />
       </div>
 
       <fieldset>
@@ -123,35 +217,27 @@ export default function ProductForm({ product, categories = [], onSubmit, isPend
 
       <div className="flex flex-col gap-3">
         <p className="text-base text-body">Images</p>
-        {isEdit ? (
-          <>
-            <ul className="flex flex-wrap gap-3">
-              {getProductImages(product).map((url) => (
-                <li key={url}><img src={url} alt="" className="size-20 rounded-lg object-cover" /></li>
-              ))}
-            </ul>
-            <p className="text-sm text-muted">Changing images is not available yet.</p>
-          </>
-        ) : (
-          <>
-            <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-line bg-white p-6 text-center text-sm text-muted transition-colors hover:border-primary focus-within:border-primary">
-              <ImagePlus aria-hidden="true" className="size-6 text-primary" />
-              <span>Choose up to {MAX_PRODUCT_IMAGES} images (the first is the main image)</span>
-              <input type="file" accept="image/*" multiple onChange={handleFiles} className="sr-only" />
-            </label>
-            {previews.length > 0 && (
-              <ul className="flex flex-wrap gap-3">
-                {previews.map((url, index) => (
-                  <li key={url}><img src={url} alt={`Selected image ${index + 1}`} className="size-20 rounded-lg object-cover" /></li>
-                ))}
-              </ul>
-            )}
-            {fileError && <p role="alert" className="text-sm text-danger">{fileError}</p>}
-          </>
+        <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-line bg-white p-6 text-center text-sm text-muted transition-colors hover:border-primary focus-within:border-primary">
+          <ImagePlus aria-hidden="true" className="size-6 text-primary" />
+          <span>Choose {MAX_PRODUCT_IMAGES} image</span>
+          <input type="file" accept="image/*" multiple onChange={handleFiles} className="sr-only" />
+        </label>
+        {previews.length > 0 && (
+          <ul className="flex justify-center w-full">
+            {previews.map((url, index) => (
+              <li key={url} ><img src={url} alt={`Selected image ${index + 1}`} className="size-30 rounded-lg object-cover" /></li>
+            ))}
+          </ul>
         )}
+        {fileError && <p role="alert" className="text-sm text-danger">{fileError}</p>}
+        <ul className="flex justify-center gap-3">
+          {getProductImages(product.product).map((url) => (
+            <li key={url}><img src={url} alt="" className="w-full h-20 rounded-lg object-cover" /></li>
+          ))}
+        </ul>
       </div>
 
-      <Button type="submit" size="lg" loading={isPending} className="self-start">
+      <Button type="submit" size="lg" loading={isPending} className="self-start cursor-pointer">
         {isEdit ? "Save changes" : "Create product"}
       </Button>
     </form>

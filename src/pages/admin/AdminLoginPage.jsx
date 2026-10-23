@@ -45,9 +45,9 @@ export default function AdminLoginPage() {
         <p className="mt-1 text-sm text-muted">Sign in to manage orders, products and reviews.</p>
         <form onSubmit={handleSubmit((values) => login.mutate(values))} noValidate className="mt-6 flex flex-col gap-4">
           {login.isError && <Alert variant="error">{login.error?.status?.message}</Alert>}
-          <Input label="Email" type="email" autoComplete="username" tone="surface" error={errors.email?.message} {...register("email")} />
-          <Input label="Password" type="password" autoComplete="current-password" tone="surface" error={errors.password?.message} {...register("password")} />
-          <Button type="submit" size="lg" loading={login.isPending}>
+          <Input label="Email" type="email" autoComplete="username" tone="surface" placeholder="Enter admin email" error={errors.email?.message} {...register("email")} />
+          <Input label="Password" type="password" placeholder="Enter admin password" autoComplete="current-password" tone="surface" error={errors.password?.message} {...register("password")} />
+          <Button type="submit" size="lg" varient="primary" loading={login.isPending} className="cursor-pointer">
             Sign in
           </Button>
         </form>

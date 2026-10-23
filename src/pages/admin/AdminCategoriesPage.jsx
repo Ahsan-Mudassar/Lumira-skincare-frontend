@@ -19,11 +19,11 @@ export default function AdminCategoriesPage() {
   const remove = useDeleteCategory();
   const [editing, setEditing] = useState(null); 
   const [deleteFor, setDeleteFor] = useState(null);
-
+  
   function confirmDelete() {
     remove.mutate(deleteFor._id, {
       onSuccess: () => toast.success("Category deleted"),
-      onError: (err) => toast.error(err.message),
+      onError: (err) => toast.error(err?.status?.message),
       onSettled: () => setDeleteFor(null),
     });
   }
@@ -75,7 +75,7 @@ export default function AdminCategoriesPage() {
                     <TableCell>
                       <div className="flex justify-end gap-1">
                         <IconButton label={`Edit ${category.name}`} size="sm" onClick={() => setEditing(category)}><Pencil /></IconButton>
-                        <IconButton label={`Delete ${category.name}`} size="sm" onClick={() => setDeleteFor(category)}><Trash2 className="text-danger" /></IconButton>
+                        <IconButton label={`Delete ${category.name}`} size="sm" onClick={()=>setDeleteFor(category)}><Trash2 className="text-danger" /></IconButton>
                       </div>
                     </TableCell>
                   </TableRow>

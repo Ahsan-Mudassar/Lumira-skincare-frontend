@@ -2,14 +2,13 @@ import { Link } from "react-router-dom";
 import Card from "../../../components/ui/Card";
 import Skeleton from "../../../components/ui/Skeleton";
 
-// Figma admin stat card: chhota label + bara number + hint. `to` ho to card link ban jata hai.
 export default function StatCard({ label, value, hint, icon: Icon, to, loading }) {
   const content = (
     <Card tone="muted" className="flex h-full flex-col gap-3 transition-colors hover:bg-surface">
       <div className="flex items-start justify-between gap-3">
         <p className="text-sm tracking-wide text-body uppercase">{label}</p>
         {Icon && (
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary-light text-primary-dark">
+          <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary-light text-primary-dark">
             <Icon aria-hidden="true" className="size-4" />
           </span>
         )}
