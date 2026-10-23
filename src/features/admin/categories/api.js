@@ -1,8 +1,13 @@
 import apiClient from "../../../services/apiClient";
+import { CATEGORY_IMAGE_FIELD } from "../../../constants/category.js"
 
-// UNVERIFIED: image kaise leta hai (URL string ya file upload) README mein clear nahi.
-// Abhi sirf { name, image? } JSON bhejte hain. 400 aaye to Category model/validation share karo.
-export const createCategory = (body) => apiClient.post("/categories", body);
-export const updateCategory = (id, body) => apiClient.patch(`/categories/${id}`, body);
-// 409 agar category mein abhi products hain
+export function buildCategoryFormData({ name, file }) {
+    const form = new FormData();
+    form.append("name", name)
+    if (file) form.append(CATEGORY_IMAGE_FIELD, file)
+    return form;
+}
+
+export const createCategory = (form) => apiClient.post("/categories", form);
+export const updateCategory = (id, form) => apiClient.patch(`/categories/${id}`, form);
 export const deleteCategory = (id) => apiClient.delete(`/categories/${id}`);

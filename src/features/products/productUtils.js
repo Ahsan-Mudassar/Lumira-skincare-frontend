@@ -10,6 +10,7 @@ export function getEffectivePrice(product) {
 }
 
 export function getCategoryName(product) {
+  // console.log("13",product)
   return typeof product?.category === "object" ? (product.category?.name ?? null) : null;
 }
 
@@ -33,6 +34,5 @@ export function toCartItem(product, quantity = 1) {
 }
 
 export function getProductImages(product) {
-  console.log("2",product)
   return (product?.images.url ?? []).map((image) => (typeof image === "string" ? image : image?.url)).filter(Boolean);
 }

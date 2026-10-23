@@ -16,8 +16,8 @@ function useProductMutation(mutationFn) {
     mutationFn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin", "products"] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.products.all }); // storefront bhi taza
-      queryClient.invalidateQueries({ queryKey: queryKeys.categories.all }); // productCount
+      queryClient.invalidateQueries({ queryKey: queryKeys.products.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.categories.all });
       queryClient.invalidateQueries({ queryKey: ["admin", "stats"] });
     },
   });

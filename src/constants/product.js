@@ -1,7 +1,7 @@
 export const PRODUCT_PAGE_SIZE = 12;
-export const MAX_PRODUCT_IMAGES = 8;
+export const MAX_PRODUCT_IMAGES = 1;
 
-export const SKIN_TYPES = ["oily", "dry", "combination", "sensitive", "normal"];
+export const SKIN_TYPES = ["oily", "dry", "combination", "sensitive", "normal", "all"];
 
 export const SORT_OPTIONS = [
   { value: "newest", label: "Newest" },
