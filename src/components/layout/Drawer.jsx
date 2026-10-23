@@ -73,7 +73,7 @@ export default function Drawer({ open, onClose, title, id, header, children, cla
         aria-modal="true"
         aria-label={title}
         className={cn(
-          "absolute inset-y-0 right-0 flex w-[85%] max-w-sm flex-col bg-cream shadow-soft transition-transform duration-300 motion-reduce:transition-none",
+          "absolute inset-y-0 right-0 flex w-[85%] max-w-sm flex-col bg-white shadow-soft transition-transform duration-300 motion-reduce:transition-none",
           open ? "translate-x-0" : "translate-x-full",
           className
         )}

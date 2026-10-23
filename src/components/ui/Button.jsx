@@ -7,7 +7,7 @@ const base =
   "disabled:cursor-not-allowed disabled:opacity-60";
 
 const variants = {
-  primary: "bg-primary-dark text-white shadow-soft hover:bg-primary",
+  primary: "bg-primary text-white shadow-soft hover:bg-primary-dark",
   secondary: "bg-surface text-ink hover:bg-surface-alt", 
   outline: "border border-primary text-primary hover:bg-primary-light/40",
   ghost: "text-primary hover:bg-surface",

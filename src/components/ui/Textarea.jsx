@@ -12,6 +12,7 @@ export default function Textarea({
   rows = 4,
   required,
   className,
+  placeholder="",
   ...props
 }) {
   const autoId = useId();
@@ -23,6 +24,7 @@ export default function Textarea({
         id={textareaId}
         rows={rows}
         required={required}
+        placeholder={placeholder}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(textareaId, error, hint)}
         className={cn(fieldBase, fieldTone[tone], error && fieldInvalid, "resize-y")}

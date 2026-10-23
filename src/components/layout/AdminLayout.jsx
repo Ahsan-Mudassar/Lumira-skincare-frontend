@@ -22,7 +22,7 @@ export default function AdminLayout() {
       </aside>
 
       <div className="min-w-0 flex-1">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-line-soft bg-cream/90 px-4 backdrop-blur lg:hidden">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-line-soft bg-white px-4 backdrop-blur lg:hidden">
           <Logo to={ROUTES.admin.dashboard} className="text-lg tracking-[0.15em]" />
           <IconButton label="Open menu" aria-expanded={menuOpen} aria-controls={ADMIN_MENU_ID} onClick={() => setMenuOpen(true)}>
             <Menu />

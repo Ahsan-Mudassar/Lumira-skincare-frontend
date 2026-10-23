@@ -13,7 +13,7 @@ export default function SegmentedControl({ options, value, onChange, label, clas
             aria-checked={active}
             onClick={() => onChange(option.value)}
             className={cn(
-              "rounded-md px-4 py-1.5 text-sm font-medium transition-colors",
+              "rounded-md px-4 cursor-pointer py-1.5 text-sm font-medium transition-colors",
               "focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary",
               active ? "bg-white text-ink shadow-soft" : "text-muted hover:text-ink"
             )}

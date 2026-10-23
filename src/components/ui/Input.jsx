@@ -12,6 +12,7 @@ export default function Input({
   id,
   type = "text",
   required,
+  placeholder = "",
   className,
   ...props
 }) {
@@ -31,6 +32,7 @@ export default function Input({
           id={inputId}
           type={type}
           required={required}
+          placeholder={placeholder}
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy(inputId, error, hint)}
           className={cn(fieldBase, fieldTone[tone], error && fieldInvalid, StartIcon && "pl-12")}

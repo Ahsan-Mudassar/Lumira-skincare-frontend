@@ -26,7 +26,7 @@ export default function IconButton({
   return (
     <Component
       {...(Component === "button" && { type: type ?? "button" })}
-      aria-label={label}
+      title={label}
       className={cn(
         "inline-flex shrink-0 items-center justify-center rounded-full transition-colors",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
