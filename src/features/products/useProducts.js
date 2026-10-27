@@ -9,7 +9,7 @@ export function useProducts(filters) {
   return useQuery({
     queryKey: queryKeys.products.list(filters),
     queryFn: () => getProducts(filters),
-    select: (res) => ({ products: res.data.data, pagination: res.data.pagination, count: res.data.count }),
+    select: (res) => ({ products: res.data, pagination: res.data.pagination, count: res.data.count }),
     placeholderData: keepPreviousData,
   });
 }

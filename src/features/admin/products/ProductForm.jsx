@@ -63,19 +63,19 @@ export default function ProductForm({ product, categories = [], onSubmit, isPend
   } = useForm({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      name: product?.product.name ?? "",
-      description: product?.product.description ?? "",
-      price: product?.product.price != null ? String(product.product.price) : "",
-      discountPrice: product?.product.discountPrice != null ? String(product.product.discountPrice) : "",
-      costPrice: product?.product.costPrice,
-      size: product?.product.size,
-      sku: product?.product.sku ?? "",
-      category: resolveCategoryId(product.product, categories),
+      name: product?.product?.name ?? "",
+      description: product?.product?.description ?? "",
+      price: product?.product?.price != null ? String(product?.product?.price) : "",
+      discountPrice: product?.product?.discountPrice != null ? String(product.product.discountPrice) : "",
+      costPrice: product?.product?.costPrice,
+      size: product?.product?.size,
+      sku: product?.product?.sku ?? "",
+      category: resolveCategoryId(product?.product, categories),
       stock: "",
-      ingredients: toList(product?.product.ingredients).join(", "),
-      skinType: normalizeSkinTypes(product?.product.skinType),
-      isFeatured: Boolean(product?.product.isFeatured),
-      isActive: product?.product.isActive !== false,
+      ingredients: toList(product?.product?.ingredients).join(", "),
+      skinType: normalizeSkinTypes(product?.product?.skinType),
+      isFeatured: Boolean(product?.product?.isFeatured),
+      isActive: product?.product?.isActive !== false,
     },
   });
 
@@ -102,7 +102,7 @@ export default function ProductForm({ product, categories = [], onSubmit, isPend
 
   return (
     <form onSubmit={handleSubmit(submit)} noValidate className="flex flex-col gap-6">
-      {error && <Alert variant="error" title="Could not save product">{error.message}</Alert>}
+      {error && <Alert variant="error" title="Could not save product">{error.status.message}</Alert>}
 
       <div className="grid gap-4 md:grid-cols-2">
         <Input

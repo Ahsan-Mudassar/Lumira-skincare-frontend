@@ -21,11 +21,11 @@ export default function AdminProductFormPage() {
   const create = useCreateProduct();
   const update = useUpdateProduct();
 
-  const listItem = isEdit ? list.data?.products.data.find((item) => item._id === id) : undefined;
-
+  const listItem = isEdit ? list.data?.products.data?.find((item) => item._id === id) : undefined;
   const detail = useProduct(listItem?.slug);
 
-  const product = listItem ? { ...(detail.data ?? {}) } : undefined;
+  const product = listItem ?? { ...(detail.data ?? {}) } ;
+  console.log(detail?.data,product)
   const mutation = isEdit ? update : create;
 
   function handleSubmit(values, files) {
