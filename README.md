@@ -60,10 +60,9 @@ Add screenshots to `docs/` and keep the paths below, or edit the table to match 
 | ------------------------------------------------ | ------------------------------------------ |
 | ![Product details](docs/product.png) |  |
 
-|           | Admin dashboard                                          |
-| --------------------------------------------------- | -------------------------------------------------------- |
-|  | ![Admin dashboard](docs/admin-dashboard.png) |
-
+| Product details                                  |                               |
+| ------------------------------------------------ | ------------------------------------------ |
+| ![Product details](docs/admin-dashboard.png) |  
 ---
 
 ## Tech Stack
