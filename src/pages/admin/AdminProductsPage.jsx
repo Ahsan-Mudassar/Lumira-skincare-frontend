@@ -150,7 +150,12 @@ export default function AdminProductsPage() {
                 })}
               </TableBody>
             </Table>
-            <Pagination className="mt-4" page={data.pagination?.page ?? page} totalPages={data.pagination?.totalPages} onPageChange={(next) => setParams({ page: String(next) })} />
+            <Pagination
+              className="mt-4"
+              page={data.pagination?.page ?? page}
+              totalPages={data.pagination?.totalPages}
+              onPageChange={(next) => setParams({ page: String(next) })} />
+
           </>
         )}
       </Card>

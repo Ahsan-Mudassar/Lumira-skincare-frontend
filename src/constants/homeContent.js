@@ -1,4 +1,4 @@
-import { Leaf, Rabbit, Recycle, ShieldCheck, Truck, Banknote } from "lucide-react";
+import { Leaf, ShieldCheck, Truck, Banknote } from "lucide-react";
 import { formatPrice } from "../lib/formatPrice";
 import { FREE_SHIPPING_THRESHOLD } from "./shipping";
 
@@ -7,29 +7,6 @@ export const TRUST_ITEMS = [
   { icon: ShieldCheck, label: "Dermatologist tested" },
   { icon: Truck, label: `Free shipping over ${formatPrice(FREE_SHIPPING_THRESHOLD)}` },
   { icon: Banknote, label: "Cash on delivery" },
-];
-
-export const COMMITMENTS = [
-  {
-    icon: Leaf,
-    title: "100% Natural Actives",
-    text: "Hand-harvested botanicals and cold-pressed extracts, chosen for potency your skin barrier can feel.",
-  },
-  {
-    icon: Rabbit,
-    title: "Cruelty-Free & Ethical",
-    text: "Formulated without animal testing, so your routine stays in harmony with nature.",
-  },
-  {
-    icon: Recycle,
-    title: "Sustainable Packaging",
-    text: "Recyclable amber glass and recycled paper, designed to keep waste to a minimum.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Dermatologist Tested",
-    text: "Gentle formulas tested for sensitive and reactive skin, with no synthetic fragrance.",
-  },
 ];
 
 export const TESTIMONIALS = [
