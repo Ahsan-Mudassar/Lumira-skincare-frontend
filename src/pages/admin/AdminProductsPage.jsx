@@ -56,8 +56,11 @@ export default function AdminProductsPage() {
   }
 
   function getCategoryName(product) {
-    const category = categories.find((item) => item._id === product.category)
-    return category?.name
+    if (categories) {
+      const category = categories.find((item) => item._id === product.category)
+      return category?.name
+    }
+    return ""
   }
 
   return (
