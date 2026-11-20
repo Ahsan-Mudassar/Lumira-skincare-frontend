@@ -10,7 +10,6 @@ export function getEffectivePrice(product) {
 }
 
 export function getCategoryName(product) {
-  // console.log("13",product)
   return typeof product?.category === "object" ? (product.category?.name ?? null) : null;
 }
 

@@ -17,7 +17,7 @@ function useReviewMutation(mutationFn) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.admin.reviews });
       queryClient.invalidateQueries({ queryKey: ["admin", "stats"] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.products.all }); // rating average badal sakta hai
+      queryClient.invalidateQueries({ queryKey: queryKeys.products.all }); 
     },
   });
 }

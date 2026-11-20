@@ -1,7 +1,7 @@
 import { formatPrice } from "../../lib/formatPrice";
 
 export default function OrderItems({ items = [], subtotal, shippingFee, total }) {
-  console.log(items)
+
   return (
     <div className="flex flex-col gap-5">
       <ul className="flex flex-col gap-4">

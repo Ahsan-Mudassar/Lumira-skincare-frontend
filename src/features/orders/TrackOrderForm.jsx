@@ -20,7 +20,7 @@ export default function TrackOrderForm({ onSubmit, isPending, error }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
-      {error && <Alert variant="error">{error.message}</Alert>}
+      {error && <Alert variant="error">{error.status.message}</Alert>}
       <Input tone="surface" label="Order number" placeholder="e.g. LUM-0001" autoCapitalize="characters" error={errors.orderNumber?.message} {...register("orderNumber")} />
       <Input tone="surface" label="Email address" type="email" placeholder="you@example.com" error={errors.email?.message} {...register("email")} />
       <Button type="submit" size="lg" loading={isPending}>
